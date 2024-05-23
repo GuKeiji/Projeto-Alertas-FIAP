@@ -7,6 +7,6 @@ import java.util.Optional;
 
 public interface AlertaRepository extends JpaRepository<Alerta, Long> {
 
-    Optional<Alerta> findByNome(String nome);
+    Optional<Alerta> findByTitulo(String titulo);
 
 }

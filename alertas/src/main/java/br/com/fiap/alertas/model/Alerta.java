@@ -24,8 +24,11 @@ public class Alerta {
             allocationSize = 1
     )
     private Long id;
-    private String nome;
+    private String titulo;
     private String descricao;
+    private String categoria;
+    private String risco;
+    private String situacao;
 
     @Column(name = "dt_Lancamento")
     private LocalDate dataAlerta;
