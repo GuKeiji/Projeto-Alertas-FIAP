@@ -39,4 +39,10 @@ public class AlertaController {
         alertaService.remover(id);
     }
 
+    @PutMapping("/{id}")
+    @ResponseStatus(HttpStatus.CREATED)
+    public Alerta atualizar(@RequestBody Alerta alerta, @PathVariable Long id){
+        alerta.setId(id);
+        return alertaService.atualizar(alerta);
+    }
 }

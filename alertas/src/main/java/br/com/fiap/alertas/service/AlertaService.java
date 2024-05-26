@@ -1,6 +1,7 @@
 package br.com.fiap.alertas.service;
 
 import br.com.fiap.alertas.model.Alerta;
+import br.com.fiap.alertas.model.Usuario;
 import br.com.fiap.alertas.repository.AlertaRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -33,6 +34,10 @@ public class AlertaService {
         } else {
             throw new RuntimeException("Alerta não existe!");
         }
+    }
+
+    public Alerta atualizar(Alerta alerta){
+        return alertaRepository.save(alerta);
     }
 
 }
