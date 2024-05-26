@@ -2,9 +2,9 @@ package br.com.fiap.alertas.model;
 
 import jakarta.persistence.*;
 import lombok.*;
-//import org.springframework.security.core.GrantedAuthority;
-//import org.springframework.security.core.authority.SimpleGrantedAuthority;
-//import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
 
 import java.util.Collection;
 import java.util.List;
@@ -16,7 +16,7 @@ import java.util.List;
 @EqualsAndHashCode
 @Entity
 @Table(name = "T_Users")
-public class Usuario {
+public class Usuario implements UserDetails {
 
     @Id
     @GeneratedValue(
@@ -32,31 +32,31 @@ public class Usuario {
 
     private String nome;
     private String email;
-    private  String senha;
+    private String senha;
 
     @Enumerated(EnumType.STRING)
     private UserRole role;
-//
-//    @Override
-//    public Collection<? extends GrantedAuthority> getAuthorities() {
-//        if (this.role == UserRole.ADMIN){
-//            return List.of(
-//                    new SimpleGrantedAuthority("ROLE_ADMIN"),
-//                    new SimpleGrantedAuthority("ROLE_USER")
-//            );
-//        }
-//        else {
-//            return List.of(
-//                    new SimpleGrantedAuthority("ROLE_USER"));
-//        }
-//    }
-//
-//    @Override
+
+    @Override
+    public Collection<? extends GrantedAuthority> getAuthorities() {
+        if (this.role == UserRole.ADMIN) {
+            return List.of(
+                    new SimpleGrantedAuthority("ROLE_ADMIN"),
+                    new SimpleGrantedAuthority("ROLE_USER")
+            );
+        } else {
+            return List.of(
+                    new SimpleGrantedAuthority("ROLE_USER")
+            );
+        }
+    }
+
+    @Override
     public String getPassword() {
         return this.senha;
     }
 
-//    @Override
+    @Override
     public String getUsername() {
         return this.email;
     }
@@ -69,22 +69,22 @@ public class Usuario {
         return this.id;
     }
 
-//    @Override
+    @Override
     public boolean isAccountNonExpired() {
         return true;
     }
 
-//    @Override
+    @Override
     public boolean isAccountNonLocked() {
         return true;
     }
 
-//    @Override
+    @Override
     public boolean isCredentialsNonExpired() {
         return true;
     }
 
-//    @Override
+    @Override
     public boolean isEnabled() {
         return true;
     }

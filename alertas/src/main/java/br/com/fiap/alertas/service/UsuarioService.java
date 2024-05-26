@@ -8,6 +8,7 @@ import br.com.fiap.alertas.repository.UsuarioRepository;
 import jakarta.persistence.EntityNotFoundException;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -20,10 +21,13 @@ public class UsuarioService {
     private UsuarioRepository usuarioRepository;
 
     public UsuarioExibicaoDto salvarUsuario(UsuarioCadastroDto usuarioDto) {
+
+        String senhaCriptografada = new BCryptPasswordEncoder().encode(usuarioDto.senha());
+
         Usuario usuario = new Usuario();
         usuario.setNome(usuarioDto.getNome());
         usuario.setEmail(usuarioDto.getEmail());
-        usuario.setSenha(usuarioDto.getSenha());
+        usuario.setSenha(senhaCriptografada);
         usuario.setRole(usuarioDto.getRole());
         return new UsuarioExibicaoDto(usuarioRepository.save(usuario));
     }
@@ -43,12 +47,14 @@ public class UsuarioService {
     public UsuarioExibicaoDto atualizar(Usuario usuario, Long id) {
         Optional<Usuario> usuarioAttOpt = usuarioRepository.findById(id);
 
+        String senhaCriptografada = new BCryptPasswordEncoder().encode(usuario.getSenha());
+
         if (usuarioAttOpt.isPresent()) {
             Usuario usuarioAtt = usuarioAttOpt.get();
             usuarioAtt.setId(id);
             usuarioAtt.setNome(usuario.getNome());
             usuarioAtt.setEmail(usuario.getUsername());
-            usuarioAtt.setSenha(usuario.getSenha());
+            usuarioAtt.setSenha(senhaCriptografada);
             usuarioAtt.setRole(usuario.getRole());
 
             Usuario usuarioSalvo = usuarioRepository.save(usuarioAtt);
