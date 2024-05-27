@@ -1,8 +1,11 @@
 package br.com.fiap.alertas.controller;
 
+import br.com.fiap.alertas.config.security.TokenService;
 import br.com.fiap.alertas.dto.LoginDto;
+import br.com.fiap.alertas.dto.TokenDto;
 import br.com.fiap.alertas.dto.UsuarioCadastroDto;
 import br.com.fiap.alertas.dto.UsuarioExibicaoDto;
+import br.com.fiap.alertas.model.Usuario;
 import br.com.fiap.alertas.service.UsuarioService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,6 +26,9 @@ public class AuthController {
     @Autowired
     private UsuarioService service;
 
+    @Autowired
+    private TokenService tokenService;
+
     @PostMapping("/login")
     public ResponseEntity login(@RequestBody @Valid LoginDto loginDto){
         UsernamePasswordAuthenticationToken usernamePassword =
@@ -33,7 +39,9 @@ public class AuthController {
 
         Authentication auth = authenticationManager.authenticate(usernamePassword);
 
-        return ResponseEntity.ok().build();
+        String token = tokenService.gerarToken((Usuario) auth.getPrincipal());
+
+        return ResponseEntity.ok(new TokenDto(token));
     }
 
     @PostMapping("/register")
