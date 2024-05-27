@@ -1,5 +1,6 @@
 package br.com.fiap.alertas.controller;
 
+import br.com.fiap.alertas.dto.LoginDto;
 import br.com.fiap.alertas.dto.UsuarioCadastroDto;
 import br.com.fiap.alertas.dto.UsuarioExibicaoDto;
 import br.com.fiap.alertas.service.UsuarioService;
@@ -23,11 +24,11 @@ public class AuthController {
     private UsuarioService service;
 
     @PostMapping("/login")
-    public ResponseEntity login(@RequestBody @Valid UsuarioCadastroDto usuarioCadastroDto){
+    public ResponseEntity login(@RequestBody @Valid LoginDto loginDto){
         UsernamePasswordAuthenticationToken usernamePassword =
                 new UsernamePasswordAuthenticationToken(
-                        usuarioCadastroDto.email(),
-                        usuarioCadastroDto.senha()
+                        loginDto.email(),
+                        loginDto.senha()
                 );
 
         Authentication auth = authenticationManager.authenticate(usernamePassword);
